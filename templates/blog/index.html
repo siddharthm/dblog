@@ -1,0 +1,13 @@
+{% if latest_entries %}
+<div style="text-align:center;">
+	<h1>This is the blog's index page </h1>
+	<ul style="list-style-type:none;"><h3>Latest Entries</h3>
+	{% for entry in latest_entries %}
+	<li><a href="entry/{{ entry.id }}">{{ entry.title }}</a></li>
+	{% endfor %}
+
+
+	</ul>
+
+</div>
+{% endif %}
