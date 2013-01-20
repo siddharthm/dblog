@@ -1,18 +1,18 @@
 # Create your views here.
-from django.template import Context,loader
-from django.http import HttpResponse
+from django.shortcuts import render_to_response
+from django.http import HttpResponse,Http404
 from blog.models import Blog
 
 def index(request):
 	latest_blog_list=Blog.objects.all().order_by('-pub_date')[:5]
-	t=loader.get_template('blog/index.html')
-	c=Context({
-		'latest_entries':latest_blog_list,
-		})
-	output='<br>'.join(["<a href='entry/"+str(p.id)+"'>"+p.title+"</a>" for p in latest_blog_list])
-	return HttpResponse(t.render(c))
+
+	return render_to_response('blog/index.html',{'latest_entries':latest_blog_list,})
 
 
 def entry(request,blog_id):
-	return HttpResponse("This is single blog entry with id %d" %int(blog_id))
+	try:
+		blog=Blog.objects.get(id=blog_id)
+	except Blog.DoesNotExist:
+		raise Http404
+	return render_to_response('blog/entry.html',{'blog':blog,})
 
